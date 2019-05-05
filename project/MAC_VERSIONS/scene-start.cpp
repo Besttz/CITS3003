@@ -133,15 +133,7 @@ void loadMeshIfNotAlreadyLoaded(int meshNumber)
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(float)*3*nVerts, sizeof(float)*3*nVerts, mesh->mTextureCoords[0] );
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(float)*6*nVerts, sizeof(float)*3*nVerts, mesh->mNormals);
 
-//////////////////////////////////////////////////////////////////////////////////////
-//    GLuint buffer[2];
-//    glGenBuffers( 2, buffer );
-//    glBindBuffer( GL_ARRAY_BUFFER, buffer[0] );
-//    glBufferData( GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW );
-//    GLuint vPosition = glGetAttribLocation( shaderProgram, "vPosition" );
-//    glEnableVertexAttribArray( vPosition );
-//    glVertexAttribPointer( vPosition, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
-//////////////////////////////////////////////////////////////////////////////////////
+
 
     // Load the element index data
     GLuint elements[mesh->mNumFaces*3];
@@ -175,8 +167,8 @@ void loadMeshIfNotAlreadyLoaded(int meshNumber)
 static void mouseClickOrScroll(int button, int state, int x, int y)
 {
     if (button==GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        if (glutGetModifiers()!=GLUT_ACTIVE_SHIFT) activateTool(button);
-        else activateTool(GLUT_LEFT_BUTTON);
+        if (glutGetModifiers() != GLUT_ACTIVE_SHIFT) activateTool(button);
+        else activateTool(GLUT_MIDDLE_BUTTON);
     }
     else if (button==GLUT_LEFT_BUTTON && state == GLUT_UP) deactivateTool();
     else if (button==GLUT_MIDDLE_BUTTON && state==GLUT_DOWN) { activateTool(button); }
@@ -378,7 +370,6 @@ void display( void )
     // Set the view matrix.  To start with this just moves the camera
     // backwards.  You'll need to add appropriate rotations.
 
-    // view = Translate(0, 0.5, -viewDist)*RotateX(-camRotUpAndOverDeg)*RotateY(camRotSidewaysDeg);
     view = Translate(0.0, 0.0, -viewDist)* RotateX(camRotUpAndOverDeg) * RotateY(camRotSidewaysDeg);
 
     SceneObject lightObj1 = sceneObjs[1]; 
@@ -443,6 +434,20 @@ static void adjustRedGreen(vec2 rg)
     sceneObjs[toolObj].rgb[1]+=rg[1];
 }
 
+//QC 1
+static void adjustAmbientDiffuse(vec2 ad)
+{
+    sceneObjs[toolObj].ambient+=ad[0];
+    sceneObjs[toolObj].diffuse+=ad[1];
+}
+
+//QC 2
+static void adjustSpecularShine(vec2 ss)
+{
+    sceneObjs[toolObj].specular+=ss[0];
+    sceneObjs[toolObj].shine+=ss[1];
+}
+
 static void adjustBlueBrightness(vec2 bl_br)
 {
     sceneObjs[toolObj].rgb[2]+=bl_br[0];
@@ -500,6 +505,11 @@ static void materialMenu(int id)
         setToolCallbacks(adjustRedGreen, mat2(1, 0, 0, 1),
                          adjustBlueBrightness, mat2(1, 0, 0, 1) );
     }
+    if (id==20) {
+        toolObj = currObject;
+        setToolCallbacks(adjustAmbientDiffuse, mat2(5, 0, 0, 1),
+                         adjustSpecularShine, mat2(5, 0, 0, 1) );
+    }
     // You'll need to fill in the remaining menu items here.                                                
     else {
         printf("Error in materialMenu\n");
@@ -541,7 +551,7 @@ static void makeMenu()
 
     int materialMenuId = glutCreateMenu(materialMenu);
     glutAddMenuEntry("R/G/B/All",10);
-    glutAddMenuEntry("UNIMPLEMENTED: Ambient/Diffuse/Specular/Shine",20);
+    glutAddMenuEntry("Ambient/Diffuse/Specular/Shine",20);
 
     int texMenuId = createArrayMenu(numTextures, textureMenuEntries, texMenu);
     int groundMenuId = createArrayMenu(numTextures, textureMenuEntries, groundMenu);

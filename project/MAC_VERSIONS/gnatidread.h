@@ -172,9 +172,11 @@ static void setToolCallbacks( void(*newLeftCallback)(vec2 transformedMovement), 
 
 vec2 clickPrev;
 
+// Tommy Changes 3rd row and add new 4th row due to the CITS3003 forum.
 static void activateTool(int button) {
     currButton = button;
-    clickPrev = currMouseXYscreen(mouseX, mouseY);
+    // clickPrev = currMouseXYscreen(mouseX, mouseY);
+    prevPos = currMouseXYscreen(mouseX, mouseY);
 
     // std::cout << clickOrigin << std::endl;  // For debugging
 }
