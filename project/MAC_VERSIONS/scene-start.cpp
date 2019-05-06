@@ -510,7 +510,6 @@ static void materialMenu(int id)
         setToolCallbacks(adjustAmbientDiffuse, mat2(5, 0, 0, 1),
                          adjustSpecularShine, mat2(5, 0, 0, 1) );
     }
-    // You'll need to fill in the remaining menu items here.                                                
     else {
         printf("Error in materialMenu\n");
     }
@@ -610,7 +609,7 @@ void reshape( int width, int height )
     //         that the same part of the scene is visible across the width of
     //         the window.
 
-    GLfloat nearDist = 0.2;
+    GLfloat nearDist = 0.0001;
     projection = Frustum(-nearDist*(float)width/(float)height,
                          nearDist*(float)width/(float)height,
                          -nearDist, nearDist,
