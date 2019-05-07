@@ -4,12 +4,16 @@ attribute vec2 vTexCoord;
 
 varying vec2 texCoord;
 varying vec3 Lvec;
+varying vec3 Lvec2;
+
 varying vec3 normal;
 varying vec3 pos;
 
 uniform mat4 ModelView;
 uniform mat4 Projection;
 uniform vec4 LightPosition;
+uniform vec4 LightPosition2;
+
 
 void main()
 {
@@ -20,6 +24,7 @@ void main()
 
     // The vector to the light from the vertex    
     Lvec = LightPosition.xyz - pos;
+    Lvec2 =LightPosition2.xyz - pos;
     normal= vNormal;
 
     gl_Position = Projection * ModelView * vpos;
