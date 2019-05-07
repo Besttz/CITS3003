@@ -308,7 +308,7 @@ void init( void )
     sceneObjs[1].brightness = 0.2; // The light's brightness is 5 times this (below).
 
     addObject(55); // Sphere for the second light
-    sceneObjs[2].loc = vec4(-2.0, 1.0, 1.0, 1.0);
+    sceneObjs[2].loc = vec4(-2.0, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.1;
     sceneObjs[2].texId = 0; // Plain texture
     sceneObjs[2].brightness = 0.2; // The light's brightness is 5 times this (below).
@@ -545,7 +545,7 @@ static void materialMenu(int id)
 static void adjustAngleYX(vec2 angle_yx)
 {
     sceneObjs[currObject].angles[1]+=angle_yx[0];
-    sceneObjs[currObject].angles[0]+=angle_yx[1];
+    sceneObjs[currObject].angles[0]-=angle_yx[1];
 }
 
 static void adjustAngleZTexscale(vec2 az_ts)
