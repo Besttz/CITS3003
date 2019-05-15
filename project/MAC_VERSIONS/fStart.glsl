@@ -14,6 +14,7 @@ uniform vec3 AmbientProduct, DiffuseProduct, SpecularProduct;
 uniform mat4 ModelView;
 uniform vec4 LightPosition;
 uniform float Shininess;
+uniform float texScale;
 
 
 void main()
@@ -71,5 +72,5 @@ void main()
     +ambient.xyz+diffuse2.xyz+ specular2.xyz    ;
     color.a = 1.0;
 
-    gl_FragColor = color * texture2D( texture, texCoord * 2.0 );
+    gl_FragColor = color * texture2D( texture, texCoord * texScale );
 }

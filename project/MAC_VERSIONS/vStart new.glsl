@@ -15,6 +15,12 @@ uniform vec4 LightPosition;
 uniform vec4 LightPosition2;
 
 
+//part 2
+// attribute vec4 boneIDs;
+// attribute vec4 boneWeights;
+// uniform mat4 boneTransforms[64];
+
+
 void main()
 {
     vec4 vpos = vec4(vPosition, 1.0);

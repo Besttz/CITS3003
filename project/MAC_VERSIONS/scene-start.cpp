@@ -252,8 +252,9 @@ static void addObject(int id)
     sceneObjs[nObjects].diffuse = 1.0; sceneObjs[nObjects].specular = 0.5;
     sceneObjs[nObjects].ambient = 0.7; sceneObjs[nObjects].shine = 10.0;
 
-    sceneObjs[nObjects].angles[0] = 0.0; sceneObjs[nObjects].angles[1] = 180.0;
+    sceneObjs[nObjects].angles[0] = 0.0; sceneObjs[nObjects].angles[1] = 00.0;
     sceneObjs[nObjects].angles[2] = 0.0;
+
 
     sceneObjs[nObjects].meshId = id;
     sceneObjs[nObjects].texId = rand() % numTextures;
