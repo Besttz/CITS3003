@@ -306,13 +306,13 @@ void init( void )
     sceneObjs[1].loc = vec4(2.0, 1.0, 1.0, 1.0);
     sceneObjs[1].scale = 0.1;
     sceneObjs[1].texId = 0; // Plain texture
-    sceneObjs[1].brightness = 1.0; // The light's brightness is 5 times this (below).
+    sceneObjs[1].brightness = 0.5; // The light's brightness is 5 times this (below).
 
     addObject(55); // Sphere for the second light
     sceneObjs[2].loc = vec4(-2.0, 1.0, 1.0, 0.0);
-    sceneObjs[2].scale = 0.1;
+    sceneObjs[2].scale = 0.2;
     sceneObjs[2].texId = 0; // Plain texture
-    sceneObjs[2].brightness = 1.0; // The light's brightness is 5 times this (below).
+    sceneObjs[2].brightness = 0.75; // The light's brightness is 5 times this (below).
 
     addObject(rand() % numMeshes); // A test mesh
 
@@ -409,8 +409,9 @@ void display( void )
     for (int i=0; i < nObjects; i++) {
         SceneObject so = sceneObjs[i];
 
-        vec3 rgb = so.rgb * lightObj1.rgb * lightObj2.rgb * so.brightness *
-        lightObj1.brightness * lightObj2.brightness * 2.0;
+        // vec3 rgb = so.rgb * lightObj1.rgb * lightObj2.rgb * so.brightness *
+        // lightObj1.brightness * lightObj2.brightness * 2.0;
+        vec3 rgb = so.rgb * so.brightness * 2.0;
         glUniform3fv( glGetUniformLocation(shaderProgram, "AmbientProduct"), 1, so.ambient * rgb );
         CheckError();
         glUniform3fv( glGetUniformLocation(shaderProgram, "DiffuseProduct"), 1, so.diffuse * rgb );
@@ -650,11 +651,11 @@ void reshape( int width, int height )
                         nearDist, 100.0);
     }
     else {
-        projection = Frustum(-nearDist*aspect,
-                        nearDist*aspect,
-                        -nearDist,
+        projection = Frustum(-nearDist,
                         nearDist,
-                        nearDist*aspect, 100.0);
+                        -nearDist*aspect,
+                        nearDist*aspect,
+                        nearDist, 100.0);
     }
 }
 
