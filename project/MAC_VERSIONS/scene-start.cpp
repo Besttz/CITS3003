@@ -306,13 +306,13 @@ void init( void )
     sceneObjs[1].loc = vec4(2.0, 1.0, 1.0, 1.0);
     sceneObjs[1].scale = 0.1;
     sceneObjs[1].texId = 0; // Plain texture
-    sceneObjs[1].brightness = 0.2; // The light's brightness is 5 times this (below).
+    sceneObjs[1].brightness = 1.0; // The light's brightness is 5 times this (below).
 
     addObject(55); // Sphere for the second light
     sceneObjs[2].loc = vec4(-2.0, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.1;
     sceneObjs[2].texId = 0; // Plain texture
-    sceneObjs[2].brightness = 0.2; // The light's brightness is 5 times this (below).
+    sceneObjs[2].brightness = 1.0; // The light's brightness is 5 times this (below).
 
     addObject(rand() % numMeshes); // A test mesh
 
@@ -384,6 +384,9 @@ void display( void )
 
     glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition"),
                   1, lightPosition);
+    glUniform3fv( glGetUniformLocation(shaderProgram, "Light1Rgb"),
+     1, lightObj1.rgb * lightObj1.brightness );
+
     CheckError();
 
 
@@ -392,6 +395,8 @@ void display( void )
     vec4 lightPosition2 = view * lightObj2.loc ;
     glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition2"),
                   1, lightPosition2);
+    glUniform3fv( glGetUniformLocation(shaderProgram, "Light2Rgb"),
+     1, lightObj2.rgb * lightObj2.brightness );
     CheckError();
 
 
@@ -535,8 +540,8 @@ static void materialMenu(int id)
     }
     if (id==20) {
         toolObj = currObject;
-        setToolCallbacks(adjustAmbientDiffuse, mat2(5, 0, 0, 1),
-                         adjustSpecularShine, mat2(5, 0, 0, 1) );
+        setToolCallbacks(adjustAmbientDiffuse, mat2(10, 0, 0, 1),
+                         adjustSpecularShine, mat2(1, 0, 0, 10) );
     }
     else {
         printf("Error in materialMenu\n");
@@ -630,19 +635,20 @@ void reshape( int width, int height )
     glViewport(0, 0, width, height);
 
     GLfloat nearDist = 0.01;
-    GLfloat  aspect = GLfloat(width)/GLfloat(height);
+    GLfloat  aspect = float(width)/float(height);
 
-     if ( aspect > 1.0 ) {
+     if ( aspect >1.0 ) {
         projection = Frustum(-nearDist*aspect,
                         nearDist*aspect,
                         -nearDist, nearDist,
                         nearDist, 100.0);
     }
     else {
-        projection = Frustum(-nearDist,nearDist,
-                        -nearDist*aspect,
+        projection = Frustum(-nearDist*aspect,
                         nearDist*aspect,
-                        nearDist, 100.0);
+                        -nearDist,
+                        nearDist,
+                        nearDist*aspect, 100.0);
     }
 }
 
