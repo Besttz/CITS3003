@@ -33,11 +33,6 @@ void main()
     vec3 H1 = normalize( L1 + E );  // Halfway vector
     vec3 H2 = normalize( L2 + E );  // Halfway vector
 
-    // The length to the light from the vertex 
-    float Ldis = length(fL1);
-    float Ldis2 = length(fL2);
-
-
     // Compute terms in the illumination equation
     vec4 ambient1 = vec4(Light1Rgb*AmbientProduct,1.0);
     vec4 ambient2 = vec4(Light2Rgb*AmbientProduct,1.0);
@@ -67,10 +62,14 @@ void main()
     // globalAmbient is independent of distance from the light source
     vec3 globalAmbient = vec3(0.1, 0.1, 0.1);
 
-    color.rgb = globalAmbient + ambient1.xyz + (diffuse1.xyz)
+    // The length to the light from the vertex 
+    float Ldis = length(fL1);
+
+    //Calculate the color
+    color.rgb = globalAmbient + ambient1.xyz + diffuse1.xyz
     *(1.0/(1.0+Ldis*Ldis))+ambient2.xyz+diffuse2.xyz;
     color.a = 1.0;
 
     gl_FragColor = color * texture2D( texture, texCoord *2.0* texScale )
-    + specular1+ specular2;
+    + specular1*(1.0/(1.0+Ldis*Ldis))+ specular2;
 }

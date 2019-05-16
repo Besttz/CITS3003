@@ -382,6 +382,9 @@ void display( void )
     SceneObject lightObj1 = sceneObjs[1]; 
     vec4 lightPosition = view * lightObj1.loc ;
 
+    if (lightObj1.brightness<=0.0) lightObj1.brightness=0.0;
+
+
     glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition"),
                   1, lightPosition);
     glUniform3fv( glGetUniformLocation(shaderProgram, "Light1Rgb"),
@@ -393,6 +396,9 @@ void display( void )
 // QI Light 2
     SceneObject lightObj2 = sceneObjs[2]; 
     vec4 lightPosition2 = view * lightObj2.loc ;
+    if (lightObj2.brightness<=0.0) lightObj2.brightness=0.0;
+
+
     glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition2"),
                   1, lightPosition2);
     glUniform3fv( glGetUniformLocation(shaderProgram, "Light2Rgb"),
