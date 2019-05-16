@@ -20,9 +20,8 @@ void main()
     // Transform vertex position into eye coordinates
     pos = (ModelView * vpos).xyz;
     normal = vec4(vNormal, 0.0);
-    // The vector to the light from the vertex    
-
-
+    //Calculate the final position
     gl_Position = Projection * ModelView * vpos;
+    
     texCoord = vTexCoord;
 }
