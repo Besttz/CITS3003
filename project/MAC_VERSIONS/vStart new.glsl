@@ -17,7 +17,6 @@ uniform mat4 boneTransforms[64];
 
 void main()
 {
-    
     mat4 boneTransform = boneWeights[0] * boneTransforms[int(boneIDs[0])] +
                          boneWeights[1] * boneTransforms[int(boneIDs[1])] +
                          boneWeights[2] * boneTransforms[int(boneIDs[2])] +

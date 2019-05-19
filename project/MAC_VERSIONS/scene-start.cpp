@@ -1,4 +1,3 @@
-
 #include "Angel.h"
 
 #include <stdlib.h>
@@ -70,6 +69,13 @@ typedef struct {
     int meshId;
     int texId;
     float texScale;
+    //Animation parameters
+    float aniStartime;//The start time of animation
+    float aniSpeed; //Speed for animation
+    float aniTotalTicks;//Total ticks for animatiomn
+    float aniTicksPerSec;//Ticks per seconds
+    float aniTotalTime;//Total time for animation
+    float aniCurrentTicks;//Present animation time
 } SceneObject;
 
 const int maxObjects = 1024; // Scenes with more than 1024 objects seem unlikely
@@ -271,6 +277,13 @@ static void addObject(int id)
 
     if (id!=0 && id!=55)
         sceneObjs[nObjects].scale = 0.005;
+    //Intialation Animation 
+    if (id>55) {
+        sceneObjs[nObjects].scale = 0.05;
+        sceneObjs[nObjects].aniStartime = glutGet(GLUT_ELAPSED_TIME);
+        sceneObjs[nObjects].aniSpeed = 1.0;
+        sceneObjs[nObjects].aniCurrentTicks = 0.0;
+    }
 
     sceneObjs[nObjects].rgb[0] = 0.7; sceneObjs[nObjects].rgb[1] = 0.7;
     sceneObjs[nObjects].rgb[2] = 0.7; sceneObjs[nObjects].brightness = 1.0;
@@ -356,7 +369,7 @@ void init( void )
 
 //----------------------------------------------------------------------------
 
-void drawMesh(SceneObject sceneObj)
+void drawMesh(SceneObject& sceneObj,int index)
 {
 
     // Activate a texture, loading if needed.
@@ -391,20 +404,29 @@ void drawMesh(SceneObject sceneObj)
     glBindVertexArrayAPPLE( vaoIDs[sceneObj.meshId] );
     CheckError();
 
+    //Save the animation parameter to the scene array.
+    if (sceneObj.meshId>55){
+        sceneObj.aniTotalTicks =
+        scenes[sceneObj.meshId]->mAnimations[0]->mDuration; //Save the number of ticks
+        sceneObj.aniTicksPerSec = 
+        scenes[sceneObj.meshId]->mAnimations[0]->mTicksPerSecond; //Save the number of ticks per second
+        sceneObj.aniTotalTime = 
+        1000 * sceneObj.aniTotalTicks/sceneObj.aniTicksPerSec;//Calculate the total time in MS
+    }
+
     int nBones = meshes[sceneObj.meshId]->mNumBones;
     if(nBones == 0)
         // If no bones, just a single identity matrix is used
         nBones = 1;
 
     // get boneTransforms for the first (0th) animation at the given
-    // time (a float measured in frames)
-    // (Replace <POSE_TIME> appropriately with a float expression
+    // animation time 
     // giving the time relative to the start of the animation,
     // measured in frames, like the frame numbers in Blender.)
 
     mat4 boneTransforms[nBones];     // was: mat4 boneTransforms[mesh->mNumBones];
     calculateAnimPose(meshes[sceneObj.meshId], scenes[sceneObj.meshId], 0,
-                     1.0, boneTransforms);
+                     sceneObj.aniCurrentTicks, boneTransforms);
     glUniformMatrix4fv(uBoneTransforms, nBones, GL_TRUE,
                       (const GLfloat *)boneTransforms);
 
@@ -467,7 +489,18 @@ void display( void )
         glUniform1f( glGetUniformLocation(shaderProgram, "Shininess"), so.shine );
         CheckError();
 
-        drawMesh(sceneObjs[i]);
+        //If it's an animation, then calculate the present animation progress
+        if(so.aniTotalTime > 0.0) {
+            float runnedTime = glutGet(GLUT_ELAPSED_TIME) - so.aniStartime;
+            sceneObjs[i].aniCurrentTicks = 
+                so.aniTicksPerSec * fmod(runnedTime, so.aniTotalTime)/1000;
+                
+            // float direction = -sin(runnedTime/2000 * 3.14159265);
+            // vec4 movement = vec4(0.0, 0.0, 2 * direction, 0.0);
+            // sceneObjs[i].loc += sceneObjs[i].model * movement;
+        }
+
+        drawMesh(sceneObjs[i],i);
     }
 
     glutSwapBuffers();
