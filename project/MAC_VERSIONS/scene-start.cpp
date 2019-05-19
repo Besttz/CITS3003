@@ -76,6 +76,7 @@ typedef struct {
     float aniTicksPerSec;//Ticks per seconds
     float aniTotalTime;//Total time for animation
     float aniCurrentTicks;//Present animation time
+    bool hide = false;
 } SceneObject;
 
 const int maxObjects = 1024; // Scenes with more than 1024 objects seem unlikely
@@ -302,6 +303,7 @@ static void addObject(int id)
     sceneObjs[nObjects].texScale = 2.0;
 
     toolObj = currObject = nObjects++;
+    //Add to currentObject Menu
     glutSetMenu(currentObjectId);
     glutAddMenuEntry(objectMenuEntries[id-1],currObject+100);
     setToolCallbacks(adjustLocXZ, camRotZ(),
@@ -483,8 +485,7 @@ void display( void )
     for (int i=0; i < nObjects; i++) {
         SceneObject so = sceneObjs[i];
 
-        // vec3 rgb = so.rgb * lightObj1.rgb * lightObj2.rgb * so.brightness *
-        // lightObj1.brightness * lightObj2.brightness * 2.0;
+        if (!so.hide){
         vec3 rgb = so.rgb * so.brightness * 2.0;
         glUniform3fv( glGetUniformLocation(shaderProgram, "AmbientProduct"), 1, so.ambient * rgb );
         CheckError();
@@ -505,6 +506,7 @@ void display( void )
         }
 
         drawMesh(sceneObjs[i],i);
+        }
     }
 
     glutSwapBuffers();
@@ -671,6 +673,11 @@ static void mainmenu(int id)
         setToolCallbacks(adjustAngleYX, mat2(400, 0, 0, -400),
                          adjustAngleZTexscale, mat2(400, 0, 0, 15) );
     }
+    if (id == 90 && currObject>=0) {
+        bool statu = sceneObjs[currObject].hide;
+        if (statu) sceneObjs[currObject].hide = false;
+        if (!statu) sceneObjs[currObject].hide = true;
+    }
     if (id == 99) exit(0);
 }
 
@@ -745,6 +752,8 @@ static void makeMenu()
     glutAddMenuEntry("Rotate/Move Camera",50);
     glutAddMenuEntry("Position/Scale", 41);
     glutAddMenuEntry("Rotation/Texture Scale", 55);
+    glutAddMenuEntry("Hide/Display",90);
+
     glutAddSubMenu("Add Object", objectId);
     glutAddSubMenu("Current Object", currentObjectId);
     glutAddSubMenu("Animation",aniMenuId);
