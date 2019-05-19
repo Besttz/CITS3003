@@ -491,7 +491,7 @@ void display( void )
 
         //If it's an animation, then calculate the present animation progress
         if(so.aniTotalTime > 0.0) {
-            float runnedTime = glutGet(GLUT_ELAPSED_TIME) - so.aniStartime;
+            float runnedTime = glutGet(GLUT_ELAPSED_TIME)*so.aniSpeed - so.aniStartime;
             sceneObjs[i].aniCurrentTicks = 
                 so.aniTicksPerSec * fmod(runnedTime, so.aniTotalTime)/1000;
                 
@@ -665,6 +665,43 @@ static void mainmenu(int id)
     if (id == 99) exit(0);
 }
 
+static void aniMenu(int id)
+{
+    deactivateTool();
+    if (currObject < 0) return;
+    if (id==60) {
+        toolObj = currObject;
+        sceneObjs[currObject].aniSpeed =0.5;
+    }
+    if (id==61) {
+        toolObj = currObject;
+        sceneObjs[currObject].aniSpeed =1.0;
+    }
+    if (id==62) {
+        toolObj = currObject;
+        sceneObjs[currObject].aniSpeed =1.5;
+    }
+    if (id==63) {
+        toolObj = currObject;
+        sceneObjs[currObject].aniSpeed =2.0;
+    }
+    if (id==64) {
+        toolObj = currObject;
+        sceneObjs[currObject].aniSpeed =3.0;
+    }
+    if (id==65) {
+        toolObj = currObject;
+        sceneObjs[currObject].aniSpeed =4.0;
+    }
+    if (id==66) {
+        toolObj = currObject;
+        sceneObjs[currObject].aniSpeed =5.0;
+    }
+    else {
+        printf("Error in animationMenu\n");
+    }
+}
+
 static void makeMenu()
 {
     int objectId = createArrayMenu(numMeshes, objectMenuEntries, objectMenu);
@@ -682,6 +719,17 @@ static void makeMenu()
     glutAddMenuEntry("Move Light 2",80);
     glutAddMenuEntry("R/G/B/All Light 2",81);
 
+    int aniMenuId = glutCreateMenu(aniMenu);
+    glutAddMenuEntry("Speed 0.5",60);
+    glutAddMenuEntry("Speed 1.0",61);
+    glutAddMenuEntry("Speed 1.5",62);
+    glutAddMenuEntry("Speed 2.0",63);
+    glutAddMenuEntry("Speed 3.0",64);
+    glutAddMenuEntry("Speed 4.0",65);
+    glutAddMenuEntry("Speed 5.0",66);
+
+    
+
     glutCreateMenu(mainmenu);
     glutAddMenuEntry("Rotate/Move Camera",50);
     glutAddSubMenu("Add object", objectId);
@@ -691,6 +739,8 @@ static void makeMenu()
     glutAddSubMenu("Texture",texMenuId);
     glutAddSubMenu("Ground Texture",groundMenuId);
     glutAddSubMenu("Lights",lightMenuId);
+    glutAddSubMenu("Animation",aniMenuId);
+
     glutAddMenuEntry("EXIT", 99);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }

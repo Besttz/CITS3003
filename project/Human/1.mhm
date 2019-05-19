@@ -1,0 +1,54 @@
+# Written by MakeHuman 1.1.1
+version v1.1.1
+tags 1
+camera 0.0 0.0 -0.0808018077847 0.0748460922729 0.398660506268 0.9
+modifier eyes/r-eye-scale-decr|incr 0.684000
+modifier stomach/stomach-tone-decr|incr 1.000000
+modifier armslegs/r-upperleg-muscle-decr|incr 0.608000
+modifier nose/nose-trans-backward|forward 0.368000
+modifier macrodetails-universal/Muscle 0.599000
+modifier macrodetails/African 0.000000
+modifier macrodetails-proportions/BodyProportions 0.853000
+modifier torso/torso-trans-backward|forward -0.116000
+modifier head/head-scale-depth-decr|incr -0.300000
+modifier macrodetails/Gender 0.960000
+modifier pelvis/bulge-decr|incr 1.000000
+modifier macrodetails-height/Height 0.740000
+modifier breast/BreastSize 0.270000
+modifier torso/torso-muscle-pectoral-decr|incr 1.000000
+modifier macrodetails/Age 0.390000
+modifier armslegs/r-lowerarm-muscle-decr|incr 0.656000
+modifier breast/BreastFirmness 0.393000
+modifier macrodetails/Asian 0.531000
+modifier armslegs/l-lowerleg-muscle-decr|incr 0.558000
+modifier nose/nose-scale-depth-decr|incr 0.266000
+modifier eyes/l-eye-eyefold-concave|convex 0.492000
+modifier armslegs/l-lowerarm-muscle-decr|incr 0.656000
+modifier head/head-fat-decr|incr 0.068000
+modifier head/head-age-decr|incr 0.006000
+modifier macrodetails/Caucasian 0.469000
+modifier armslegs/l-upperarm-scale-depth-decr|incr 0.816000
+modifier eyes/r-eye-eyefold-concave|convex 0.492000
+modifier eyes/l-eye-scale-decr|incr 0.684000
+modifier armslegs/l-upperleg-muscle-decr|incr 0.608000
+modifier breast/nipple-size-decr|incr -0.142000
+modifier buttocks/buttocks-volume-decr|incr 1.000000
+modifier armslegs/r-lowerleg-muscle-decr|incr 0.558000
+modifier armslegs/r-upperarm-scale-depth-decr|incr 0.816000
+modifier head/head-back-scale-depth-decr|incr 1.000000
+modifier macrodetails-universal/Weight 0.559000
+modifier pelvis/pelvis-tone-decr|incr 1.000000
+tongue tongue01 52ad91a3-caad-4e50-8c38-67634e5e789c
+teeth Teeth_Base 0a5ec82a-0d5f-43ce-a765-8f076f95692d
+proxy male_muscle_13290 79e967dc-3f7a-4f2d-851e-4f06753ed571
+hair short04 e09bfd91-f83f-4f9a-ba8c-4635cd1ae0d8
+skeleton cmu_mb.mhskel
+eyebrows eyebrow012 1c16325c-7831-4166-831a-05c5b609c219
+eyes Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa
+pose standing02.bvh
+clothesHideFaces True
+expression smile03.mhpose
+skinMaterial skins/young_asian_male/young_asian_male.mhmat
+material short04 e09bfd91-f83f-4f9a-ba8c-4635cd1ae0d8 short04.mhmat
+material Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa eyes/materials/brown.mhmat
+subdivide True
