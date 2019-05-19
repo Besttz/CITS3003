@@ -85,6 +85,8 @@ int nObjects = 0;    // How many objects are currenly in the scene.
 int currObject = -1; // The current object
 int toolObj = -1;    // The object currently being modified
 
+int currentObjectId;//Saving the currentObject Menu ID.
+
 //----------------------------------------------------------------------------
 //
 // Loads a texture by number, and binds it for later use.    
@@ -300,6 +302,8 @@ static void addObject(int id)
     sceneObjs[nObjects].texScale = 2.0;
 
     toolObj = currObject = nObjects++;
+    glutSetMenu(currentObjectId);
+    glutAddMenuEntry(objectMenuEntries[id-1],currObject+100);
     setToolCallbacks(adjustLocXZ, camRotZ(),
                      adjustScaleY, mat2(0.05, 0, 0, 10.0) );
     glutPostRedisplay();
@@ -516,6 +520,11 @@ static void objectMenu(int id)
     addObject(id);
 }
 
+static void currentObjectMenu(int id){
+    deactivateTool();
+    toolObj = currObject = id-100;
+}
+
 static void texMenu(int id)
 {
     deactivateTool();
@@ -728,18 +737,21 @@ static void makeMenu()
     glutAddMenuEntry("Speed 4.0",65);
     glutAddMenuEntry("Speed 5.0",66);
 
-    
+    currentObjectId =glutCreateMenu(currentObjectMenu);
+    glutAddMenuEntry(objectMenuEntries[sceneObjs[currObject].meshId-1],currObject+100);
+
 
     glutCreateMenu(mainmenu);
     glutAddMenuEntry("Rotate/Move Camera",50);
-    glutAddSubMenu("Add object", objectId);
     glutAddMenuEntry("Position/Scale", 41);
     glutAddMenuEntry("Rotation/Texture Scale", 55);
+    glutAddSubMenu("Add Object", objectId);
+    glutAddSubMenu("Current Object", currentObjectId);
+    glutAddSubMenu("Animation",aniMenuId);
     glutAddSubMenu("Material", materialMenuId);
     glutAddSubMenu("Texture",texMenuId);
     glutAddSubMenu("Ground Texture",groundMenuId);
     glutAddSubMenu("Lights",lightMenuId);
-    glutAddSubMenu("Animation",aniMenuId);
 
     glutAddMenuEntry("EXIT", 99);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
