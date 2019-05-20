@@ -1,0 +1,22 @@
+# Written by MakeHuman 1.0.2
+version v1.0.2
+tags 01 old
+eyebrows Eyebrow012 1c16325c-7831-4166-831a-05c5b609c219
+eyes Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa
+clothesHideFaces True
+gendered BreastFirmness 0.500000
+gendered BreastSize 0.403000
+macro Weight 0.605000
+macro Gender 0.952000
+macro Age 0.387000
+macro Height 0.847000
+macro Asian 0.597000
+macro African 0.000000
+macro Caucasian 0.403000
+macro Muscle 0.605000
+macro BodyProportions 0.895000
+background enabled False
+skinMaterial skins/young_asian_male/young_asian_male.mhmat
+material Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa eyes/materials/brown.mhmat
+skeleton game.json
+subdivide True

@@ -1,0 +1,25 @@
+# Written by MakeHuman 1.0.2
+version v1.0.2
+tags 02 Old
+tongue tongue01 52ad91a3-caad-4e50-8c38-67634e5e789c
+hair mhair02 f81a4e9a-e3d7-4ecb-bdf0-16d7fd9070a4
+eyebrows Eyebrow009 55b3b52a-379e-426d-b320-562ed57202b3
+eyes Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa
+clothesHideFaces True
+gendered BreastFirmness 0.500000
+gendered BreastSize 0.500000
+macro Weight 0.702000
+macro Gender 1.000000
+macro Age 0.500000
+macro Height 0.677000
+macro Asian 0.177000
+macro African 0.000000
+macro Caucasian 0.823000
+macro Muscle 0.855000
+macro BodyProportions 0.968000
+background enabled False
+skinMaterial skins/young_caucasian_male/young_caucasian_male.mhmat
+material mhair02 f81a4e9a-e3d7-4ecb-bdf0-16d7fd9070a4 hair/mhair02/materials/male02_black.mhmat
+material Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa eyes/materials/brown.mhmat
+skeleton game.json
+subdivide True
