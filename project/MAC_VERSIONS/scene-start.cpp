@@ -720,7 +720,7 @@ static void aniMenu(int id)
 
 static void makeMenu()
 {
-    int objectId = createArrayMenu(numMeshes, objectMenuEntries, objectMenu);
+    int objectId = createArrayMenu(numMeshes-1, objectMenuEntries, objectMenu);
 
     int materialMenuId = glutCreateMenu(materialMenu);
     glutAddMenuEntry("R/G/B/All",10);
