@@ -111,7 +111,7 @@ char objectMenuEntries[numMeshes][128] = {
     "41 Horse (head up)", "42 Skull", "43 Fighter Jet I", "44 Toad", "45 Convertible", 
     "46 Porsche II", "47 Hare", "48 Vintage Car", "49 Fighter Jet II", "50 Gargoyle", 
     "51 Chef", "52 Parasaurolophus", "53 Rooster", "54 T-rex", "55 Sphere","56 Test Model",
-    "57 Model1", "58 Model2","59 Model3"
+    "57 Walking Man", "58 Boxing Man","59 Jumping Man"
 };
 
 
