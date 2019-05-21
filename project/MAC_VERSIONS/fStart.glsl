@@ -70,6 +70,6 @@ void main()
     *(1.0/(1.0+Ldis*Ldis))+ambient2.xyz+diffuse2.xyz;
     color.a = 1.0;
 
-    gl_FragColor = color * texture2D( texture, texCoord *2.0* texScale )
+    gl_FragColor = color * texture2D( texture, texCoord * texScale )
     + specular1*(1.0/(1.0+Ldis*Ldis))+ specular2;
 }

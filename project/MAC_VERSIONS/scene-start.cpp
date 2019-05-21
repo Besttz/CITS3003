@@ -269,7 +269,7 @@ static void doRotate()
                                      
 //------Add an object to the scene--------------------------------------------
 
-static void addObject(int id)
+static void addObject(int id, int tex)
 {
 
     vec2 currPos = currMouseXYworld(camRotSidewaysDeg);
@@ -306,13 +306,43 @@ static void addObject(int id)
 
 
     sceneObjs[nObjects].meshId = id;
-    sceneObjs[nObjects].texId = rand() % numTextures;
+    if (tex == 0)
+    {
+        sceneObjs[nObjects].texId = rand() % numTextures;
+    } else {
+        sceneObjs[nObjects].texId = tex;
+    }
+    
+    
     sceneObjs[nObjects].texScale = 2.0;
 
     toolObj = currObject = nObjects++;
     //Add to currentObject Menu
     glutSetMenu(currentObjectId);
     glutAddMenuEntry(objectMenuEntries[id-1],currObject+100);
+    setToolCallbacks(adjustLocXZ, camRotZ(),
+                     adjustScaleY, mat2(0.05, 0, 0, 10.0) );
+    glutPostRedisplay();
+}
+static void duplicateObject(int id)
+{
+    addObject(sceneObjs[id].meshId,sceneObjs[id].texId);
+ 
+    if (sceneObjs[id].meshId>55) {
+        loadMeshIfNotAlreadyLoaded(id);
+        sceneObjs[currObject].aniSpeed = sceneObjs[id].aniSpeed;
+        sceneObjs[currObject].aniCurrentTicks = sceneObjs[id].aniCurrentTicks;
+    }
+
+    sceneObjs[currObject].rgb[0] = sceneObjs[id].rgb[0]; sceneObjs[currObject].rgb[1] = sceneObjs[id].rgb[1];
+    sceneObjs[currObject].rgb[2] = sceneObjs[id].rgb[2]; sceneObjs[currObject].brightness = sceneObjs[id].brightness;
+
+    sceneObjs[currObject].diffuse = sceneObjs[id].diffuse; sceneObjs[currObject].specular = sceneObjs[id].specular;
+    sceneObjs[currObject].ambient = sceneObjs[id].ambient; sceneObjs[currObject].shine = sceneObjs[id].shine;
+
+    sceneObjs[currObject].angles[0] = sceneObjs[id].angles[0]; sceneObjs[currObject].angles[1] = sceneObjs[id].angles[1];
+    sceneObjs[currObject].angles[2] = sceneObjs[id].angles[2];
+
     setToolCallbacks(adjustLocXZ, camRotZ(),
                      adjustScaleY, mat2(0.05, 0, 0, 10.0) );
     glutPostRedisplay();
@@ -353,25 +383,25 @@ void init( void )
     uBoneTransforms = glGetUniformLocation(shaderProgram, "boneTransforms");
 
     // Objects 0, and 1 are the ground and the first light.
-    addObject(0); // Square for the ground
+    addObject(0,0); // Square for the ground
     sceneObjs[0].loc = vec4(0.0, 0.0, 0.0, 1.0);
     sceneObjs[0].scale = 10.0;
     sceneObjs[0].angles[0] = 90.0; // Rotate it.
     sceneObjs[0].texScale = 5.0; // Repeat the texture.
 
-    addObject(55); // Sphere for the first light
+    addObject(55,0); // Sphere for the first light
     sceneObjs[1].loc = vec4(2.0, 1.0, 1.0, 1.0);
     sceneObjs[1].scale = 0.1;
     sceneObjs[1].texId = 0; // Plain texture
     sceneObjs[1].brightness = 0.5; // The light's brightness is 5 times this (below).
 
-    addObject(55); // Sphere for the second light
+    addObject(55,0); // Sphere for the second light
     sceneObjs[2].loc = vec4(-2.0, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.2;
     sceneObjs[2].texId = 0; // Plain texture
     sceneObjs[2].brightness = 0.75; // The light's brightness is 5 times this (below).
 
-    addObject(rand() % numMeshes); // A test mesh
+    addObject(rand() % numMeshes,0); // A test mesh
 
     // We need to enable the depth test to discard fragments that
     // are behind previously drawn fragments for the same pixel.
@@ -513,7 +543,7 @@ void display( void )
 static void objectMenu(int id)
 {
     deactivateTool();
-    addObject(id);
+    addObject(id,0);
 }
 
 static void currentObjectMenu(int id){
@@ -672,6 +702,9 @@ static void mainmenu(int id)
         if (statu) sceneObjs[currObject].hide = false;
         if (!statu) sceneObjs[currObject].hide = true;
     }
+    if (id == 91 && currObject>=0) {
+        duplicateObject(currObject);
+    }
     if (id == 99) exit(0);
 }
 
@@ -747,6 +780,7 @@ static void makeMenu()
     glutAddMenuEntry("Position/Scale", 41);
     glutAddMenuEntry("Rotation/Texture Scale", 55);
     glutAddMenuEntry("Hide/Display",90);
+    glutAddMenuEntry("Duplicate Object",91);
 
     glutAddSubMenu("Add Object", objectId);
     glutAddSubMenu("Current Object", currentObjectId);
