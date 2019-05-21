@@ -76,6 +76,7 @@ typedef struct {
     float aniTicksPerSec;//Ticks per seconds
     float aniTotalTime;//Total time for animation
     float aniCurrentTicks;//Present animation time
+    bool aniUpend = false;
     bool hide = false;
 } SceneObject;
 
@@ -301,7 +302,7 @@ static void addObject(int id, int tex)
     sceneObjs[nObjects].diffuse = 1.0; sceneObjs[nObjects].specular = 0.5;
     sceneObjs[nObjects].ambient = 0.7; sceneObjs[nObjects].shine = 10.0;
 
-    sceneObjs[nObjects].angles[0] = 0.0; sceneObjs[nObjects].angles[1] = 00.0;
+    sceneObjs[nObjects].angles[0] = 0.0; sceneObjs[nObjects].angles[1] = 180.0;
     sceneObjs[nObjects].angles[2] = 0.0;
 
 
@@ -329,18 +330,23 @@ static void duplicateObject(int id)
     addObject(sceneObjs[id].meshId,sceneObjs[id].texId);
  
     if (sceneObjs[id].meshId>55) {
-        loadMeshIfNotAlreadyLoaded(id);
         sceneObjs[currObject].aniSpeed = sceneObjs[id].aniSpeed;
         sceneObjs[currObject].aniCurrentTicks = sceneObjs[id].aniCurrentTicks;
+        sceneObjs[currObject].aniUpend= sceneObjs[id].aniUpend;
     }
 
-    sceneObjs[currObject].rgb[0] = sceneObjs[id].rgb[0]; sceneObjs[currObject].rgb[1] = sceneObjs[id].rgb[1];
-    sceneObjs[currObject].rgb[2] = sceneObjs[id].rgb[2]; sceneObjs[currObject].brightness = sceneObjs[id].brightness;
+    sceneObjs[currObject].rgb[0] = sceneObjs[id].rgb[0]; 
+    sceneObjs[currObject].rgb[1] = sceneObjs[id].rgb[1];
+    sceneObjs[currObject].rgb[2] = sceneObjs[id].rgb[2]; 
+    sceneObjs[currObject].brightness = sceneObjs[id].brightness;
 
-    sceneObjs[currObject].diffuse = sceneObjs[id].diffuse; sceneObjs[currObject].specular = sceneObjs[id].specular;
-    sceneObjs[currObject].ambient = sceneObjs[id].ambient; sceneObjs[currObject].shine = sceneObjs[id].shine;
+    sceneObjs[currObject].diffuse = sceneObjs[id].diffuse; 
+    sceneObjs[currObject].specular = sceneObjs[id].specular;
+    sceneObjs[currObject].ambient = sceneObjs[id].ambient; 
+    sceneObjs[currObject].shine = sceneObjs[id].shine;
 
-    sceneObjs[currObject].angles[0] = sceneObjs[id].angles[0]; sceneObjs[currObject].angles[1] = sceneObjs[id].angles[1];
+    sceneObjs[currObject].angles[0] = sceneObjs[id].angles[0]; 
+    sceneObjs[currObject].angles[1] = sceneObjs[id].angles[1];
     sceneObjs[currObject].angles[2] = sceneObjs[id].angles[2];
 
     setToolCallbacks(adjustLocXZ, camRotZ(),
@@ -524,9 +530,18 @@ void display( void )
 
         //If it's an animation, then calculate the present animation progress
         if(so.aniTotalTime > 0.0) {
+
+            
             float runnedTime = glutGet(GLUT_ELAPSED_TIME)*so.aniSpeed - so.aniStartime;
-            sceneObjs[i].aniCurrentTicks = 
+            if (!so.aniUpend)
+            {
+                sceneObjs[i].aniCurrentTicks = 
                 so.aniTicksPerSec * fmod(runnedTime, so.aniTotalTime)/1000;
+            } else {
+                sceneObjs[i].aniCurrentTicks = so.aniTicksPerSec * 
+                (so.aniTotalTime-fmod(runnedTime, so.aniTotalTime))/1000;
+            }
+            
         }
 
         drawMesh(sceneObjs[i],i);
@@ -740,6 +755,11 @@ static void aniMenu(int id)
         toolObj = currObject;
         sceneObjs[currObject].aniSpeed =5.0;
     }
+    if (id==67) {
+        bool statu = sceneObjs[currObject].aniUpend;
+        if (statu) sceneObjs[currObject].aniUpend = false;
+        if (!statu) sceneObjs[currObject].aniUpend = true;
+    }
     else {
         printf("Error in animationMenu\n");
     }
@@ -763,6 +783,7 @@ static void makeMenu()
     glutAddMenuEntry("R/G/B/All Light 2",81);
 
     int aniMenuId = glutCreateMenu(aniMenu);
+    glutAddMenuEntry("Upend Animation",67);
     glutAddMenuEntry("Speed 0.5",60);
     glutAddMenuEntry("Speed 1.0",61);
     glutAddMenuEntry("Speed 1.5",62);
