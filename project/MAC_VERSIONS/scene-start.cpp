@@ -723,6 +723,18 @@ static void mainmenu(int id)
     if (id == 99) exit(0);
 }
 
+void unifyAnimation() {
+    float currentTime = glutGet(GLUT_ELAPSED_TIME);
+    for (int i=0; i < nObjects; i++) {
+        if(sceneObjs[i].aniTotalTime > 0.0) {
+        sceneObjs[i].scale = 0.05;
+        sceneObjs[i].aniStartime = currentTime;
+        sceneObjs[i].aniSpeed = 1.0;
+        sceneObjs[i].aniCurrentTicks = 0.0;
+        }
+    }
+}
+
 static void aniMenu(int id)
 {
     deactivateTool();
@@ -760,6 +772,9 @@ static void aniMenu(int id)
         if (statu) sceneObjs[currObject].aniUpend = false;
         if (!statu) sceneObjs[currObject].aniUpend = true;
     }
+    if (id==68) {
+        unifyAnimation();
+    }
     else {
         printf("Error in animationMenu\n");
     }
@@ -784,6 +799,7 @@ static void makeMenu()
 
     int aniMenuId = glutCreateMenu(aniMenu);
     glutAddMenuEntry("Upend Animation",67);
+    glutAddMenuEntry("Unify Animation",68);
     glutAddMenuEntry("Speed 0.5",60);
     glutAddMenuEntry("Speed 1.0",61);
     glutAddMenuEntry("Speed 1.5",62);
